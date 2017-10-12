@@ -14,6 +14,10 @@
 		0A6D0EEB1F8DA8E900AF1E44 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0A6D0EE91F8DA8E900AF1E44 /* LaunchScreen.storyboard */; };
 		0A6D0EF61F8DA8E900AF1E44 /* LoclProductTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A6D0EF51F8DA8E900AF1E44 /* LoclProductTests.swift */; };
 		0A6D0F011F8DA8E900AF1E44 /* LoclProductUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A6D0F001F8DA8E900AF1E44 /* LoclProductUITests.swift */; };
+		0A6D0F191F8DC2E900AF1E44 /* test in Resources */ = {isa = PBXBuildFile; fileRef = 0A6D0F181F8DBF9900AF1E44 /* test */; };
+		0A6D0F1A1F8DC3EF00AF1E44 /* ViewController.swift in Resources */ = {isa = PBXBuildFile; fileRef = 0A6D0EE21F8DA8E900AF1E44 /* ViewController.swift */; };
+		0A6D0F1B1F8DC3F800AF1E44 /* AppDelegate.swift in Resources */ = {isa = PBXBuildFile; fileRef = 0A6D0EE01F8DA8E800AF1E44 /* AppDelegate.swift */; };
+		0A6D0F1C1F8DC3FC00AF1E44 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0A6D0EEC1F8DA8E900AF1E44 /* Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +51,7 @@
 		0A6D0EFC1F8DA8E900AF1E44 /* LoclProductUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LoclProductUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A6D0F001F8DA8E900AF1E44 /* LoclProductUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoclProductUITests.swift; sourceTree = "<group>"; };
 		0A6D0F021F8DA8E900AF1E44 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0A6D0F181F8DBF9900AF1E44 /* test */ = {isa = PBXFileReference; lastKnownFileType = folder; path = test; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,6 +102,7 @@
 		0A6D0EDF1F8DA8E800AF1E44 /* LoclProduct */ = {
 			isa = PBXGroup;
 			children = (
+				0A6D0F181F8DBF9900AF1E44 /* test */,
 				0A6D0EE01F8DA8E800AF1E44 /* AppDelegate.swift */,
 				0A6D0EE21F8DA8E900AF1E44 /* ViewController.swift */,
 				0A6D0EE41F8DA8E900AF1E44 /* Main.storyboard */,
@@ -232,7 +238,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0A6D0F1C1F8DC3FC00AF1E44 /* Info.plist in Resources */,
+				0A6D0F1B1F8DC3F800AF1E44 /* AppDelegate.swift in Resources */,
+				0A6D0F1A1F8DC3EF00AF1E44 /* ViewController.swift in Resources */,
 				0A6D0EEB1F8DA8E900AF1E44 /* LaunchScreen.storyboard in Resources */,
+				0A6D0F191F8DC2E900AF1E44 /* test in Resources */,
 				0A6D0EE81F8DA8E900AF1E44 /* Assets.xcassets in Resources */,
 				0A6D0EE61F8DA8E900AF1E44 /* Main.storyboard in Resources */,
 			);
@@ -429,6 +439,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = YCNE987R3Z;
 				INFOPLIST_FILE = LoclProduct/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = LOCL.LoclProduct;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -444,6 +455,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = YCNE987R3Z;
 				INFOPLIST_FILE = LoclProduct/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = LOCL.LoclProduct;
 				PRODUCT_NAME = "$(TARGET_NAME)";
