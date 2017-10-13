@@ -1,0 +1,283 @@
+<html>
+
+<head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+        <meta charset="utf-8">
+            <title>LOCL - Your Personalizable Map </title>
+            <style>
+
+            #map {
+                height: 100%;
+            }
+
+            html, body {
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            
+            #pac-input {
+                background-color: #fff;
+                font-family: Roboto;
+                font-size: 15px;
+                font-weight: 300;
+                margin-left: 105px;
+                margin-top: 17px;
+                padding: 0 20px 0 15px;
+                text-overflow: ellipsis;
+                width: 240px;
+            }
+            
+            #pac-input:focus {
+                border-color: #4d90fe;
+            }
+            
+
+            </style>
+            </head>
+
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+
+
+<body>
+    <input id="pac-input" class="controls" type="text" placeholder="Search Box">
+        <div id="map"></div>
+        
+        <script>
+            
+            var markers = []; //array to store all markers
+            
+            function edit_marker_name(a, thiis) //function to edit the information inside the markers
+            {
+                var edit_marker_name = prompt ("Edit marker name:" + $(thiis).html());
+                
+                //id marker
+                markerEdit= window['marker_' + a];
+                
+                //updated
+                if(edit_marker_name) {
+                    $(thiis).html(edit_marker_name);
+                    
+                    //update marker title
+                    markerEdit.setTitle(edit_marker_name);
+                    
+                    //remove listener
+                    google.maps.event.clearListeners(markerEdit, 'click');
+                    
+                    //content
+                    var content= "<span class ='destination_name' onclick='edit_marker_name' onclick='edit_marker_name(\""+ a + "\", this)'>" + edit_marker_name +"</span>";
+                    
+                    var infoWindowEdit= new google.maps.InfoWindow();
+                    google.maps.event.addListener(markerEdit, 'click', (function(markerEdit, content, infoWindowEdit){
+                                                                        return function(){
+                                                                        infoWindowEdit.setContent(content);
+                                                                        infoWindowEdit.open(map,markerEdit);
+                                                                        };
+                                                                        
+                                                                        
+                                                                        }
+                                                                        )(markerEdit,content,infoWindowEdit))};
+                
+            }
+        
+        function deleteButton(deleteDiv, map) //function to set up delete button
+        {
+            //CSS for button border
+            var deleteUI = document.createElement('div');
+            deleteUI.style.backgroundColor = 'grey';
+            deleteUI.style.border = 'grey';
+            deleteUI.style.borderRadius = '3px';
+            deleteUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+            deleteUI.style.marginBottom = '22px';
+            deleteUI.style.cursor= 'pointer';
+            deleteUI.style.textAlign = 'center';
+            deleteUI.title = 'Delete Markers';
+            deleteDiv.appendChild(deleteUI);
+            
+            //CSS for button interior
+            var deleteText = document.createElement('div');
+            deleteText.style.color = 'white';
+            deleteText.style.fontFamily = 'Roboto,Arial,sans-serif';
+            deleteText.style.fontSize = '16px';
+            deleteText.style.lineHeight = '38px';
+            deleteText.style.paddingLeft = '5px';
+            deleteText.style.paddingRight = '5px';
+            deleteText.innerHTML = 'Delete Markers';
+            deleteUI.appendChild(deleteText);
+            
+            // setting up Event Listeners to delete all markers
+            deleteUI.addEventListener('click', function() {
+                                       deleteMarkers(); //calls on function to delete markers
+                                      });}
+        
+        // Sets the map on all markers in the array of markers
+        function setMapOnAll(map) {
+            for (var i = 0; i < markers.length; i++) {
+                markers[i].setMap(map);
+                
+            }
+            
+        }
+        // Removes the markers from the map, but keeps them in the array.
+        function clearMarkers() {
+            setMapOnAll(null);
+            
+        }
+        // Shows any markers currently in the array.
+        function showMarkers() {
+            setMapOnAll(map);
+            
+        }
+        // Deletes all markers in the array by removing references to them.
+        function deleteMarkers() {
+            clearMarkers();
+            markers = [];
+            
+        }
+
+        function initMap() { //initiating map with search bar + my location marker
+            
+            var myLatLng =  {lat: 35.667735, lng: 139.770622}; //My location in Tokyo
+            var marker_name= 'null'; //initial variable for markers created with click
+            
+            var map = new google.maps.Map(document.getElementById('map'), { //creates map variable
+                                          zoom: 14,
+                                          center: myLatLng
+                                          });
+                                          
+            var iconBase = 'https://maps.google.com/mapfiles/ms/micons/'; //library of GoogleMaps Objects for Icons-- contains markers
+            var iconB = 'https://maps.google.com/mapfiles/kml/shapes/';   //library of GoogleMaps Objects for Icons-- contains man
+            
+            var transitLayer = new google.maps.TransitLayer();
+            transitLayer.setMap(map);
+            
+            // Create the search box and link it to the UI element.
+            var input = document.getElementById('pac-input');
+            var searchBox = new google.maps.places.SearchBox(input);
+            map.controls[google.maps.ControlPosition.TOP_CENTER].push(input); //set location of search bar to top center of screen
+            map.addListener('bounds_changed', function() {
+                            searchBox.setBounds(map.getBounds());
+                            
+                            });
+                            
+            searchBox.addListener('places_changed', function() {
+                                  var places = searchBox.getPlaces();
+                                  if (places.length == 0) {
+                                  return;
+                                  
+                                  }
+             var bounds = new google.maps.LatLngBounds();
+             
+             places.forEach(function(place) {
+                            if (!place.geometry) {
+                            console.log("Returned place contains no geometry");
+                            return;
+                            
+                            }
+            
+             var icon = {
+                            url: place.icon,
+                            size: new google.maps.Size(71, 71),
+                            origin: new google.maps.Point(0, 0),
+                            anchor: new google.maps.Point(17, 34),
+                            scaledSize: new google.maps.Size(25, 25)
+                            
+                            };
+                                                                                               
+             //create marker for each place that is searched
+            markers.push(new google.maps.Marker({
+                                                map: map,
+                                                icon: iconBase + 'red-dot.png',
+                                                title: place.name,
+                                                position: place.geometry.location
+                                                
+                                                }));
+                            
+            if (place.geometry.viewport) {  // Only geocodes have viewport
+                            bounds.union(place.geometry.viewport);
+                            
+                            } else {
+                            bounds.extend(place.geometry.location);
+                            
+                            }
+                            
+                            });
+                                  map.fitBounds(bounds);
+                                  
+                                  });
+                                  
+                 
+               //Creation of my location marker
+               var contentString = '<div id="content">'+ '<b>You Are Here. </b>' + '</div>';
+               var infowindow = new google.maps.InfoWindow({ //will display content
+                                                           content: contentString
+                                                           
+                                                           });
+
+               var marker = new google.maps.Marker({
+                                                   icon: iconB + 'man.png', //marker for my location
+                                                   position: myLatLng,
+                                                   map: map,
+                                                   animation: google.maps.Animation.DROP,
+                                                   title: 'YOU ARE HERE'
+                                                   
+                                                   });
+                                                   
+                                                   marker.addListener('click', function() {
+                                                                      infowindow.open(map, marker);
+                                                                      
+                                                                      });
+              
+              //delete button UI set up
+              var deleteControlDiv = document.createElement('div');
+              var deleteControl = new deleteButton(deleteControlDiv, map);
+              deleteControlDiv.index = 1;
+              map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(deleteControlDiv); //setting position to bottom center of screen
+              
+              //create marker with click on map
+              google.maps.event.addListener(map,'click', function(event) {
+                                            if (marker_name == 'null'){
+                                            marker_name= 'a';
+                                            
+                                            }
+                                            else {
+                                            marker_name= String.fromCharCode(marker_name.charCodeAt(0) + 1 ); //a, b, c , d...
+                                            
+                                            }
+                                            //add the parameter marker
+                                            var location = event.latLng;
+                                            window['marker_' + marker_name] = new google.maps.Marker({
+                                                                                                     position: location,
+                                                                                                     map: map,
+                                                                                                     icon: iconBase + 'green-dot.png',
+                                                                                                     draggable: true,
+                                                                                                     title: '' + marker_name
+                                                                                                     
+                                                                                                     });
+                                            
+                                            //id marker
+                                            var markerEdit= window['marker_' +marker_name];
+                                            markers.push(markerEdit);
+                                            
+                                            //event to show marker title
+                                            var content= "<span class='destination_name' onclick='edit_marker_name(\"" +marker_name + "\", this)'>" + marker_name +"</span>";
+                                            var infoWindowEdit = new google.maps.InfoWindow();
+                                            google.maps.event.addListener(markerEdit, 'click', (function(markerEdit,content,InfoWindow){
+                                                                                                return function(){
+                                                                                                infoWindowEdit.setContent(content);
+                                                                                                infoWindowEdit.open(map,markerEdit);
+                                                                                                
+                                                                                                };
+                                                                                                
+                                                                                                }) (markerEdit, content,infoWindowEdit));});
+        }
+        
+ </script>
+        
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBOjAaoOY0NyntNXH-NilOxT8Qzthmi02U&libraries=places&callback=initMap"></script>
+
+        
+</html>
